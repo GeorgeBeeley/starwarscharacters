@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { useCharacter } from '@/core/composables/useCharacter'
-import { createNewReview, type Review } from '@/core/domain/review'
+import { createNewReview, submitReview, type Review } from '@/core/domain/review'
 import { ref } from 'vue'
 
 const character = useCharacter()
 
 const reviews = ref<Review[]>(character.self.value!.reviews)
-const newReview = ref<Review>(createNewReview())
+const newReview = ref<Review>(createNewReview(character.self.value!.id))
 const setRating = (i: number) => {
   newReview.value.rating = i
 }
@@ -14,7 +14,8 @@ const setRating = (i: number) => {
 const onSave = () => {
   if (character.self.value) {
     character.self.value.reviews.push(newReview.value)
-    newReview.value = createNewReview()
+    submitReview(newReview.value)
+    newReview.value = createNewReview(character.self.value!.id)
   }
 }
 </script>
