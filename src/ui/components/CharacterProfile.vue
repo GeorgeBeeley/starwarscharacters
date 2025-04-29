@@ -11,9 +11,9 @@ const character = useCharacter()
 
   <div
     v-else
-    class="max-w-4xl mx-auto bg-black/50 p-10 rounded-2xl shadow-2xl backdrop-blur-md border border-yellow-500"
+    class="max-w-4xl mx-auto bg-black/50 p-5 md:p-10 rounded-2xl shadow-2xl backdrop-blur-md border border-yellow-500"
   >
-    <h1 class="text-5xl font-extrabold mb-10 text-center tracking-wider uppercase">
+    <h1 class="text-3xl md:text-5xl font-extrabold mb-10 text-center tracking-wider uppercase">
       {{ character.self.value.name }}
     </h1>
 
