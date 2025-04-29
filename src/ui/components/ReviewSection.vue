@@ -1,21 +1,40 @@
 <script setup lang="ts">
+import { mockDelay } from '@/core/application/utils'
 import { useCharacter } from '@/core/composables/useCharacter'
-import { createNewReview, submitReview, type Review } from '@/core/domain/review'
-import { ref } from 'vue'
+import { useReview } from '@/core/composables/useReview'
+import { computed } from 'vue'
 
 const character = useCharacter()
 
-const reviews = ref<Review[]>(character.self.value!.reviews)
-const newReview = ref<Review>(createNewReview(character.self.value!.id))
+if (character.self.value === null || character.self.value === undefined)
+  throw new Error('Character is null or undefined')
+
+const reviews = computed(() => character.self.value!.reviews)
+const review = useReview(character.self.value.id)
+
 const setRating = (i: number) => {
-  newReview.value.rating = i
+  review.self.value.rating = i
 }
 
-const onSave = () => {
-  if (character.self.value) {
-    character.self.value.reviews.push(newReview.value)
-    submitReview(newReview.value)
-    newReview.value = createNewReview(character.self.value!.id)
+const onSave = async () => {
+  if (!character.self.value) return
+
+  try {
+    await review.submitReview()
+
+    if (review.success.value && review.self.value) {
+      reviews.value.push(review.self.value)
+      mockDelay(1000)
+      review.self.value = {
+        id: crypto.randomUUID(),
+        character_id: character.self.value.id,
+        comment: '',
+        rating: 0,
+      }
+      review.success.value = false
+    }
+  } catch (err) {
+    console.error('Failed to save review:', err)
   }
 }
 </script>
@@ -24,34 +43,37 @@ const onSave = () => {
   <div class="max-w-4xl mx-auto pt-12">
     <textarea
       class="w-full mx-auto bg-white rounded-3xl p-4 text-black font-bold"
-      v-model="newReview.comment"
+      v-model="review.self.value.comment"
       :placeholder="`Review ${character.self.value?.name}...`"
     ></textarea>
 
     <div class="flex flex-row justify-between py-4 px-2">
       <div class="flex flex-row gap-1">
         <i
-          v-for="(i, index) in newReview.rating"
+          v-for="(i, index) in review.self.value.rating"
           :key="index"
           class="pi pi-star-fill text-xl text-amber-500 cursor-pointer"
           @click="setRating(i)"
         />
         <i
-          v-for="(j, index) in 5 - newReview.rating!"
+          v-for="(j, index) in 5 - review.self.value.rating!"
           :key="index"
           class="pi pi-star text-xl text-amber-500 cursor-pointer"
-          @click="setRating(newReview.rating! + j)"
+          @click="setRating(review.self.value.rating! + j)"
         />
       </div>
 
       <button
         class="bg-amber-400 text-black font-bold rounded px-4 py-2 cursor-pointer"
         @click="onSave"
-        :disabled="newReview.comment === ''"
+        :disabled="review.self.value.comment === ''"
       >
         Submit
       </button>
     </div>
+
+    <div v-if="review.submitting.value" class="text-amber-500">Posting review...</div>
+    <div v-if="review.error.value !== null" class="text-red-500">{{ review.error.value }}</div>
 
     <div class="pt-8 pb-4">
       <h2 class="text-2xl mb-4">{{ character.self.value?.reviews.length }} Reviews</h2>

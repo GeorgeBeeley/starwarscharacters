@@ -4,7 +4,7 @@ import ReviewSection from '@/ui/components/ReviewSection.vue'
 </script>
 
 <template>
-  <div class="m-2 md:p-8 text-yellow-400 font-sans w-full">
+  <div class="p-2 md:p-8 text-yellow-400 font-sans w-full">
     <CharacterProfile />
     <ReviewSection />
   </div>
