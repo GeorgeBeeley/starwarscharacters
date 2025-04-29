@@ -13,8 +13,10 @@ onMounted(() => {
 </script>
 <template>
   <div
-    class="flex flex-col md:flex-row min-h-screen bg-gradient-to-b from-black via-gray-900 text-yellow-400 w-full"
-  >
+    class="fixed top-0 left-0 w-screen h-screen -z-10 bg-gradient-to-b from-black via-gray-900 to-gray-800"
+  ></div>
+
+  <div class="flex flex-col md:flex-row min-h-screen text-yellow-400 w-full">
     <aside
       class="w-full md:w-64 md:fixed md:top-5 md:left-8 md:h-[90vh] flex flex-col py-6 px-4 backdrop-blur-md border-0 md:border border-yellow-500 rounded-xl shadow-lg"
     >
