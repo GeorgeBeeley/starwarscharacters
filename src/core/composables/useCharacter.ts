@@ -18,9 +18,9 @@ export function useCharacter() {
   }
 
   const loadCharacter = async () => {
-    const id = route.params.id as string
-    character.value = store.getCharacter(id)
-    character.value ??= await store.fetchCharacterById(id)
+    const id = route.params.id
+    character.value = store.getCharacter(id as string)
+    character.value ??= await store.fetchCharacterById(id as string)
   }
 
   const loadCharacterNestedData = async () => {
