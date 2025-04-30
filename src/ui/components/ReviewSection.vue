@@ -52,13 +52,13 @@ const onSave = async () => {
         <i
           v-for="(i, index) in review.self.value.rating"
           :key="index"
-          class="pi pi-star-fill text-xl text-amber-500 cursor-pointer"
+          class="pi pi-star-fill text-xl text-amber-500 cursor-pointer hover:scale-105"
           @click="setRating(i)"
         />
         <i
           v-for="(j, index) in 5 - review.self.value.rating!"
           :key="index"
-          class="pi pi-star text-xl text-amber-500 cursor-pointer"
+          class="pi pi-star text-xl text-amber-500 cursor-pointer hover:scale-105"
           @click="setRating(review.self.value.rating! + j)"
         />
       </div>

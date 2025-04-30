@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { useCharacterStore } from '@/infrastructure/stores/characters'
 import CharactersList from '@/ui/components/CharactersList.vue'
+import { computed } from 'vue'
 
 const characterStore = useCharacterStore()
-const favourites = characterStore.getFavourites()
+const favourites = computed(() => characterStore.getFavourites())
 </script>
 
 <template>
